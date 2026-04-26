@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mohamed El Asri — Researcher & Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #07090f;
+      --bg2: #0d1220;
+      --bg3: #111827;
+      --cyan: #00c8e0;
+      --cyan-dim: rgba(0,200,224,0.15);
+      --amber: #e8a84c;
+      --text: #e8e6e0;
+      --text-muted: #6b7280;
+      --text-dim: #9ca3af;
+      --border: rgba(255,255,255,0.07);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.4;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,224,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,224,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 4rem;
+      background: rgba(7,9,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--cyan);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--cyan); }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 4rem 4rem;
+      overflow: hidden;
+    }
+
+    /* Satellite orbit ring */
+    .orbit-ring {
+      position: absolute;
+      right: -10%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,200,224,0.08);
+      animation: spin 60s linear infinite;
+    }
+    .orbit-ring::before {
+      content: '';
+      position: absolute;
+      top: -4px; left: 50%;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 20px var(--cyan);
+      transform: translateX(-50%);
+    }
+    .orbit-ring-2 {
+      width: 500px; height: 500px;
+      border-color: rgba(232,168,76,0.06);
+      animation-duration: 40s;
+      animation-direction: reverse;
+      right: -3%;
+    }
+    .orbit-ring-2::before {
+      background: var(--amber);
+      box-shadow: 0 0 16px var(--amber);
+    }
+
+    @keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-name {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 7vw, 7rem);
+      font-weight: 300;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--cyan);
+    }
+
+    .hero-title {
+      margin-top: 1.5rem;
+      font-family: var(--serif);
+      font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+      font-weight: 300;
+      color: var(--text-dim);
+      max-width: 620px;
+      line-height: 1.5;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .hero-meta {
+      margin-top: 2.5rem;
+      display: flex;
+      gap: 2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .hero-tag {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+    }
+
+    .hero-tag span {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      display: block;
+    }
+
+    .hero-cta {
+      margin-top: 3.5rem;
+      display: flex;
+      gap: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 1s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      background: var(--cyan);
+      color: var(--bg);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.85rem 2rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 4rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s 1.4s forwards;
+    }
+
+    .scroll-line {
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      animation: expandLine 1.5s 1.6s ease forwards;
+      transform-origin: left;
+      transform: scaleX(0);
+    }
+
+    @keyframes expandLine { to { transform: scaleX(1); } }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 7rem 4rem;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: var(--cyan);
+      opacity: 0.4;
+    }
+
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.15;
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--bg2); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--text-dim);
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+      text-wrap: pretty;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, var(--cyan), transparent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s;
+    }
+
+    .stat-card:hover { border-color: rgba(0,200,224,0.3); }
+    .stat-card:hover::before { transform: scaleX(1); }
+
+    .stat-number {
+      font-family: var(--serif);
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--cyan);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Affiliation badge */
+    .affiliations {
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .affil-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem 1.2rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--cyan);
+    }
+
+    .affil-icon {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      color: var(--cyan);
+      padding-top: 0.2rem;
+      white-space: nowrap;
+    }
+
+    .affil-text {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    .affil-text strong {
+      color: var(--text);
+      display: block;
+      font-size: 0.9rem;
+    }
+
+    /* ── RESEARCH ── */
+    #research { background: var(--bg); }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .skill-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 2rem;
+      transition: all 0.3s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 60px; height: 60px;
+      background: radial-gradient(circle, var(--cyan-dim), transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .skill-card:hover {
+      border-color: rgba(0,200,224,0.25);
+      transform: translateY(-3px);
+    }
+
+    .skill-card:hover::after { opacity: 1; }
+
+    .skill-icon {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .skill-icon::before {
+      content: '';
+      width: 20px; height: 1px;
+      background: var(--cyan);
+    }
+
+    .skill-name {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+
+    .skill-desc {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .skill-tags {
+      margin-top: 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+    }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--bg2); }
+
+    .projects-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5px;
+    }
+
+    .project-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 2.5rem;
+      align-items: start;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .project-item:hover {
+      border-color: rgba(0,200,224,0.25);
+      background: var(--bg3);
+    }
+
+    .project-num {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      padding-top: 0.4rem;
+    }
+
+    .project-body {}
+
+    .project-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+    }
+
+    .project-status::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    .project-status.live { color: var(--cyan); }
+    .project-status.live::before { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+
+    .project-title {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+
+    .project-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 700px;
+      text-wrap: pretty;
+    }
+
+    .project-tags {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .project-venue {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-align: right;
+      white-space: nowrap;
+      padding-top: 0.4rem;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .contact-left .section-title {
+      margin-bottom: 1.2rem;
+    }
+
+    .contact-desc {
+      font-size: 1rem;
+      color: var(--text-dim);
+      margin-bottom: 2.5rem;
+      text-wrap: pretty;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      padding: 1.2rem 1.5rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      text-decoration: none;
+      transition: all 0.25s;
+      color: var(--text);
+    }
+
+    .contact-link:hover {
+      border-color: rgba(0,200,224,0.3);
+      background: var(--bg3);
+      transform: translateX(6px);
+    }
+
+    .contact-link-icon {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--cyan);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      min-width: 60px;
+    }
+
+    .contact-link-text {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+    }
+
+    .contact-link-arrow {
+      margin-left: auto;
+      color: var(--text-muted);
+      font-size: 1rem;
+      transition: transform 0.2s;
+    }
+
+    .contact-link:hover .contact-link-arrow {
+      transform: translateX(4px);
+      color: var(--cyan);
+    }
+
+    /* Right side: terminal-like card */
+    .contact-right {
+      position: relative;
+    }
+
+    .terminal-card {
+      background: #0a0d14;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .terminal-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+
+    .terminal-dot:nth-child(1) { background: #ff5f56; }
+    .terminal-dot:nth-child(2) { background: #febc2e; }
+    .terminal-dot:nth-child(3) { background: #27c840; }
+
+    .terminal-title {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      margin-left: 0.5rem;
+    }
+
+    .terminal-body {
+      padding: 2rem;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      line-height: 2;
+    }
+
+    .t-comment { color: #4b5563; }
+    .t-key { color: var(--amber); }
+    .t-string { color: #a3e635; }
+    .t-cyan { color: var(--cyan); }
+    .t-muted { color: var(--text-muted); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-copy span { color: var(--cyan); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 2rem; }
+      .nav-links { gap: 1.5rem; }
+      .section-inner { padding: 5rem 2rem; }
+      #hero { padding: 7rem 2rem 4rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .project-item { grid-template-columns: auto 1fr; }
+      .project-venue { display: none; }
+      .orbit-ring { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .hero-cta { flex-direction: column; }
+      .about-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="grid-bg"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">M. El Asri</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#research">Research</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="orbit-ring"></div>
+    <div class="orbit-ring orbit-ring-2"></div>
+
+    <div class="hero-eyebrow">Doctoral Researcher · Remote Sensing · AI</div>
+    <h1 class="hero-name">
+      Mohamed<br><em>El Asri</em>
+    </h1>
+    <p class="hero-title">
+      Electrical Engineer & PhD Researcher at LISTM Laboratory,<br>
+      Chouaïb Doukkali University — El Jadida, Morocco
+    </p>
+    <div class="hero-meta">
+      <div class="hero-tag"><span></span>Deep Learning</div>
+      <div class="hero-tag"><span></span>SAR Remote Sensing</div>
+      <div class="hero-tag"><span></span>Precision Agriculture</div>
+    </div>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Research ↓</a>
+      <a href="#contact" class="btn-ghost">Get in Touch</a>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll to explore
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-inner">
+      <div class="about-grid">
+        <div class="reveal">
+          <div class="section-label">01 — About</div>
+          <h2 class="section-title">Where AI meets<br><em>Earth Observation</em></h2>
+          <div class="about-text">
+            <p>I am a doctoral researcher developing hybrid deep learning architectures to classify agricultural crops from multi-temporal Sentinel-1 SAR satellite imagery — bridging artificial intelligence with Earth observation to support precision agriculture across Morocco and the wider African continent.</p>
+            <p>Alongside my research, I hold an administrative role at the École Supérieure de Technologie in Essaouira, and I am involved in applied innovation through the <strong>SolHydra</strong> precision agriculture startup.</p>
+            <p>I am passionate about making satellite data more accessible and actionable for farmers, policymakers, and agri-businesses.</p>
+          </div>
+          <div class="affiliations">
+            <div class="affil-item">
+              <div class="affil-icon">PHD</div>
+              <div class="affil-text">
+                <strong>LISTM Laboratory · Chouaïb Doukkali University</strong>
+                El Jadida, Morocco — supervised by Prof. Hamid Nebdi & Dr. Imad Hamdi
+              </div>
+            </div>
+            <div class="affil-item">
+              <div class="affil-icon">ADMIN</div>
+              <div class="affil-text">
+                <strong>École Supérieure de Technologie · Essaouira</strong>
+                Institutional administration & academic management
+              </div>
+            </div>
+            <div class="affil-item">
+              <div class="affil-icon">MOB</div>
+              <div class="affil-text">
+                <strong>Erasmus+ Global Mobility · University of Oulu</strong>
+                Finland — international research fellowship (ongoing)
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal" style="transition-delay:0.15s">
+          <div class="about-stats">
+            <div class="stat-card">
+              <div class="stat-number">76</div>
+              <div class="stat-label">Studies synthesized in systematic review</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">2</div>
+              <div class="stat-label">Agricultural plains studied (Tadla & Gharb)</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">S-1</div>
+              <div class="stat-label">Sentinel-1 SAR multi-temporal imagery</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number">3+</div>
+              <div class="stat-label">International conferences & journals</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESEARCH / SKILLS -->
+  <section id="research">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label">02 — Expertise</div>
+        <h2 class="section-title">Research &amp; Skills</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-card reveal" style="transition-delay:0.05s">
+          <div class="skill-icon">Core</div>
+          <div class="skill-name">Deep Learning Architectures</div>
+          <div class="skill-desc">Design and training of hybrid CNN2D-Mamba models for multi-temporal satellite image classification and agricultural crop mapping.</div>
+          <div class="skill-tags">
+            <span class="tag">PyTorch</span>
+            <span class="tag">CNN2D</span>
+            <span class="tag">Mamba</span>
+            <span class="tag">SSM</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.1s">
+          <div class="skill-icon">Domain</div>
+          <div class="skill-name">SAR Remote Sensing</div>
+          <div class="skill-desc">Multi-temporal Sentinel-1 SAR data processing, feature extraction, and time-series analysis for land cover and crop type classification.</div>
+          <div class="skill-tags">
+            <span class="tag">Sentinel-1</span>
+            <span class="tag">GEE</span>
+            <span class="tag">SAR</span>
+            <span class="tag">SNAP</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.15s">
+          <div class="skill-icon">Applied</div>
+          <div class="skill-name">Precision Agriculture</div>
+          <div class="skill-desc">Translating satellite-derived insights into practical tools for farmers, cooperatives, and agri-businesses. Co-lead of the SolHydra startup initiative.</div>
+          <div class="skill-tags">
+            <span class="tag">Agri-tech</span>
+            <span class="tag">Startup</span>
+            <span class="tag">Innovation</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.2s">
+          <div class="skill-icon">Method</div>
+          <div class="skill-name">Scientific Research</div>
+          <div class="skill-desc">Systematic literature reviews, scientific writing in English and French, peer-reviewed publication, and international conference presentations.</div>
+          <div class="skill-tags">
+            <span class="tag">PRISMA</span>
+            <span class="tag">Elsevier</span>
+            <span class="tag">IEEE</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.25s">
+          <div class="skill-icon">Tech</div>
+          <div class="skill-name">Data & Engineering</div>
+          <div class="skill-desc">Python-based data pipelines on Google Earth Engine, geospatial data processing, and large-scale remote sensing dataset management.</div>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">GEE</span>
+            <span class="tag">NumPy</span>
+            <span class="tag">GDAL</span>
+          </div>
+        </div>
+
+        <div class="skill-card reveal" style="transition-delay:0.3s">
+          <div class="skill-icon">Intl.</div>
+          <div class="skill-name">Academic Management</div>
+          <div class="skill-desc">Institutional administration, Erasmus+ mobility coordination, CRTS partnership development, and academic project management.</div>
+          <div class="skill-tags">
+            <span class="tag">Erasmus+</span>
+            <span class="tag">CRTS</span>
+            <span class="tag">ARES</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-inner">
+      <div class="reveal">
+        <div class="section-label">03 — Projects</div>
+        <h2 class="section-title">Research &amp; Innovation</h2>
+      </div>
+      <div class="projects-list">
+
+        <div class="project-item reveal">
+          <div class="project-num">01</div>
+          <div class="project-body">
+            <div class="project-status">In Progress</div>
+            <div class="project-title">CNN2D-Mamba Hybrid Architecture for Crop Classification</div>
+            <div class="project-desc">A novel deep learning architecture combining 2D convolutional networks with the Mamba state-space model for multi-temporal Sentinel-1 SAR crop classification over Morocco's Tadla and Gharb plains. Target crops include wheat, sugar beet, and maize. Forms the core of my doctoral thesis.</div>
+            <div class="project-tags">
+              <span class="tag">PyTorch</span><span class="tag">CNN2D</span><span class="tag">Mamba</span><span class="tag">Sentinel-1</span><span class="tag">Crop Mapping</span>
+            </div>
+          </div>
+          <div class="project-venue">IRASET 2026<br>Conditionally Accepted</div>
+        </div>
+
+        <div class="project-item reveal" style="transition-delay:0.1s">
+          <div class="project-num">02</div>
+          <div class="project-body">
+            <div class="project-status">Published</div>
+            <div class="project-title">Systematic Review — Vision Transformers for SAR Flood Detection</div>
+            <div class="project-desc">A comprehensive PRISMA-based systematic review synthesizing findings from 76 studies (49 referenced works) on the application of Vision Transformers and attention mechanisms to SAR-based flood detection and mapping. Submitted to <em>Scientific African</em> (Elsevier).</div>
+            <div class="project-tags">
+              <span class="tag">ViT</span><span class="tag">Attention</span><span class="tag">Flood Detection</span><span class="tag">Systematic Review</span>
+            </div>
+          </div>
+          <div class="project-venue">Scientific African<br>Elsevier</div>
+        </div>
+
+        <div class="project-item reveal" style="transition-delay:0.15s">
+          <div class="project-num">03</div>
+          <div class="project-body">
+            <div class="project-status live">Active</div>
+            <div class="project-title">SolHydra — Precision Agriculture Startup</div>
+            <div class="project-desc">A precision agriculture innovation initiative exploring how satellite-derived insights can be translated into practical tools for farmers and cooperatives. The project recently represented Morocco at ECAM Brussels as part of the ARES entrepreneurship mission.</div>
+            <div class="project-tags">
+              <span class="tag">Startup</span><span class="tag">Agri-tech</span><span class="tag">ARES</span><span class="tag">Brussels</span>
+            </div>
+          </div>
+          <div class="project-venue">ECAM Brussels<br>ARES Mission</div>
+        </div>
+
+        <div class="project-item reveal" style="transition-delay:0.2s">
+          <div class="project-num">04</div>
+          <div class="project-body">
+            <div class="project-status">Ongoing</div>
+            <div class="project-title">Erasmus+ Global Mobility — University of Oulu, Finland</div>
+            <div class="project-desc">International research fellowship at the University of Oulu, focused on advancing deep learning for remote sensing within a global academic environment. Strengthening interdisciplinary collaborations in AI and Earth observation.</div>
+            <div class="project-tags">
+              <span class="tag">Erasmus+</span><span class="tag">Finland</span><span class="tag">International</span>
+            </div>
+          </div>
+          <div class="project-venue">Univ. of Oulu<br>Finland</div>
+        </div>
+
+        <div class="project-item reveal" style="transition-delay:0.25s">
+          <div class="project-num">05</div>
+          <div class="project-body">
+            <div class="project-status">Partnership</div>
+            <div class="project-title">CRTS Collaboration — Satellite Imagery Access</div>
+            <div class="project-desc">Building institutional partnerships with Morocco's Centre Royal de Télédétection Spatiale to access satellite imagery archives and strengthen national research capacity in remote sensing and agricultural monitoring.</div>
+            <div class="project-tags">
+              <span class="tag">CRTS</span><span class="tag">Morocco</span><span class="tag">Partnership</span><span class="tag">Archives</span>
+            </div>
+          </div>
+          <div class="project-venue">CRTS<br>Morocco</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-inner">
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="section-label">04 — Contact</div>
+          <h2 class="section-title">Let's Connect</h2>
+          <p class="contact-desc">Whether you're interested in research collaboration, academic partnerships, or precision agriculture innovation — I'd love to hear from you.</p>
+          <div class="contact-links">
+            <a href="/cdn-cgi/l/email-protection#305d5f58515d55541e55000909704553541e51531e5d51" class="contact-link">
+              <span class="contact-link-icon">Email</span>
+              <span class="contact-link-text"><span class="__cf_email__" data-cfemail="b6dbd9ded7dbd3d298d3868f8ff6c3d5d298d7d598dbd7">[email&#160;protected]</span></span>
+              <span class="contact-link-arrow">→</span>
+            </a>
+            <a href="https://www.linkedin.com/in/mohamed-el-asri-79b5b7196" target="_blank" class="contact-link">
+              <span class="contact-link-icon">LinkedIn</span>
+              <span class="contact-link-text">Mohamed El Asri</span>
+              <span class="contact-link-arrow">→</span>
+            </a>
+            <a href="/cdn-cgi/l/email-protection#3954565158545c5d175c090000794c5a5d17585a175458" class="contact-link">
+              <span class="contact-link-icon">Location</span>
+              <span class="contact-link-text">El Jadida & Essaouira, Morocco</span>
+              <span class="contact-link-arrow">→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="reveal" style="transition-delay:0.15s">
+          <div class="terminal-card">
+            <div class="terminal-header">
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <div class="terminal-dot"></div>
+              <span class="terminal-title">profile.json</span>
+            </div>
+            <div class="terminal-body">
+              <span class="t-muted">{</span><br>
+              &nbsp;&nbsp;<span class="t-key">"name"</span><span class="t-muted">: </span><span class="t-string">"Mohamed El Asri"</span><span class="t-muted">,</span><br>
+              &nbsp;&nbsp;<span class="t-key">"role"</span><span class="t-muted">: </span><span class="t-string">"PhD Researcher"</span><span class="t-muted">,</span><br>
+              &nbsp;&nbsp;<span class="t-key">"lab"</span><span class="t-muted">: </span><span class="t-string">"LISTM, UCD"</span><span class="t-muted">,</span><br>
+              &nbsp;&nbsp;<span class="t-key">"focus"</span><span class="t-muted">: [</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-string">"Deep Learning"</span><span class="t-muted">,</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-string">"SAR Remote Sensing"</span><span class="t-muted">,</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-string">"Precision Agriculture"</span><br>
+              &nbsp;&nbsp;<span class="t-muted">],</span><br>
+              &nbsp;&nbsp;<span class="t-key">"location"</span><span class="t-muted">: </span><span class="t-string">"Morocco 🇲🇦"</span><span class="t-muted">,</span><br>
+              &nbsp;&nbsp;<span class="t-key">"open_to"</span><span class="t-muted">: </span><span class="t-string">"Collaborations"</span><br>
+              <span class="t-muted">}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-copy">© 2026 <span>Mohamed El Asri</span> — All rights reserved</div>
+    <div class="footer-copy">LISTM Laboratory · Chouaïb Doukkali University · El Jadida</div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Intersection Observer for reveal animations
+    const revealEls = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+
+    revealEls.forEach(el => observer.observe(el));
+
+    // Smooth active nav highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(sec => {
+        if (window.scrollY >= sec.offsetTop - 200) current = sec.id;
+      });
+      navLinks.forEach(a => {
+        a.style.color = a.getAttribute('href') === '#' + current ? 'var(--cyan)' : '';
+      });
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
